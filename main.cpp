@@ -14,10 +14,7 @@ using namespace std;
 
 struct  SDL_State {
     SDL_Window* window;
-    SDL_Window* window2;
-    SDL_Renderer* renderer;
 	SDL_GLContext  gl_context;
-	SDL_GLContext  gl_context2;
 };
 
 
@@ -67,44 +64,22 @@ void initDisplay(SDL_State& sdl) {
 	if( sdl.window == nullptr) SDL_die("SDL_CreateWindow");
 	sdl.gl_context = SDL_GL_CreateContext(sdl.window);
 	if( sdl.gl_context == nullptr) SDL_die( "SDL_GL_CreateContext");
-	SDL_GL_MakeCurrent(sdl.window, sdl.gl_context);
-	SDL_GL_SetSwapInterval(1);
-
-	setViewport(1200, 800);
-
-    glShadeModel( GL_SMOOTH );
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-	glDisable(GL_DEPTH_TEST);
 
 
-	// create the sdl2 window2
-    sdl.window2 = SDL_CreateWindow( "HEAT2", SDL_WINDOWPOS_UNDEFINED,
-								   SDL_WINDOWPOS_UNDEFINED, 600, 500,
-								   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-	if( sdl.window2 == nullptr) SDL_die("SDL_CreateWindow");
-    sdl.gl_context2 = SDL_GL_CreateContext(sdl.window);
-	if( sdl.gl_context2 == nullptr) SDL_die( "SDL_GL_CreateContext");
-
-
-	SDL_GL_MakeCurrent(sdl.window2, sdl.gl_context2);
 	SDL_GL_SetSwapInterval(1);
 	setViewport(1200, 800);
     glShadeModel( GL_SMOOTH );
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 	glDisable(GL_DEPTH_TEST);
-
-
 
 	cout << glGetString(GL_VENDOR) << "\n";
 	cout << glGetString(GL_RENDERER) << "\n";
 	cout << glGetString(GL_VERSION) << "\n";
 	cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
-
-
 }
 
 
-void render(int windowId) {
+void render() {
 
 	static unsigned int frame_number = 0;
 
@@ -116,11 +91,7 @@ void render(int windowId) {
 	glLoadIdentity();
 	glScalef(0.3, 0.3, 0.3);
 
-	if( windowId == 1) {
-		glRotatef( frame_number/2.0, 0.0, 0.0, 1.0 );
-	} else {
-		glRotatef(frame_number/-2.0, 0.0, 0.0, 1.0 );
-	}
+	glRotatef(frame_number/-2.0, 0.0, 0.0, 1.0 );
 
 	glTranslatef(0, 1.0, 0.0);
 
@@ -142,10 +113,7 @@ void render(int windowId) {
     glEnd( );                           /* Done Drawing The Quad */
 
 	glFlush();
-
 	glLoadIdentity();
-
-
 }
 
 
@@ -178,22 +146,15 @@ int main(int argc, char *argv[]) {
 			}
 			if(e.type == SDL_WINDOWEVENT) {
 				if( e.window.event == SDL_WINDOWEVENT_RESIZED) {
-					SDL_GL_MakeCurrent(sdl.window, sdl.gl_context);
-					setViewport( e.window.data1, e.window.data2 );
-					SDL_GL_MakeCurrent(sdl.window2, sdl.gl_context2);
 					setViewport( e.window.data1, e.window.data2 );
 				}
 			}
 
+
 		}
 
-		SDL_GL_MakeCurrent(sdl.window, sdl.gl_context);
-		render(0);
+		render();
 		SDL_GL_SwapWindow(sdl.window);
-
-		SDL_GL_MakeCurrent(sdl.window2, sdl.gl_context2);
-		render(1);
-		SDL_GL_SwapWindow(sdl.window2);
 
 		SDL_Delay(35);
 
