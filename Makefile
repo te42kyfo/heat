@@ -1,19 +1,20 @@
-.PHONY: all main
+.PHONY: all main clean
 NAME=heat
 CXX=g++
 LIB= `sdl2-config --libs` -lGL
-CPPFLAGS= -O3 -Wall -Werror -Wshadow -ansi -fopenmp -std=c++0x
+CPPFLAGS= -O3 -Wall -Werror -Wshadow -ansi -fopenmp -std=c++0x `sdl2-config --cflags`
 SRC= main.cpp
 
-HEADERS=`find . -iname . *.hpp`
+HEADERS= $(shell find . -iname "*.hpp")
 
 all: $(NAME)
+
 
 run: $(NAME)
 	./$(NAME)
 
-$(NAME): $(SRC)
-	$(CXX) $(CPPFLAGS) $(INCLUDE) $(SRC) -o $(NAME) $(LIB) 
+$(NAME): $(SRC) $(HEADERS)
+	$(CXX) $(CPPFLAGS) $(INCLUDE) $(SRC) -o $(NAME) $(LIB)
 
 
 clean:

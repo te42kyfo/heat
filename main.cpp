@@ -10,6 +10,8 @@
 
 #include <sys/time.h>
 
+#include "render.hpp"
+
 using namespace std;
 
 struct  SDL_State {
@@ -24,17 +26,6 @@ double dtime() {
 	gettimeofday( &t, NULL);
 	tseconds = (double) t.tv_sec + (double) t.tv_usec*1.0e-6;
 	return tseconds;
-}
-
-void setViewport( int width, int height ) {
-    glViewport( 0, 0, ( GLsizei )width, ( GLsizei )height );
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glOrtho( (float) -width/height, (float) width/height, -1, 1, -1, 1);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
 }
 
 
@@ -53,69 +44,32 @@ void initDisplay(SDL_State& sdl) {
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
 
 
     // create the sdl2 window
-    sdl.window = SDL_CreateWindow( "HEAT", SDL_WINDOWPOS_CENTERED,
-								   SDL_WINDOWPOS_CENTERED, 600, 500,
-								   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    sdl.window = SDL_CreateWindow( "HEAT", SDL_WINDOWPOS_UNDEFINED,
+								   SDL_WINDOWPOS_UNDEFINED, 800, 600,
+								   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+
 	if( sdl.window == nullptr) SDL_die("SDL_CreateWindow");
+
 	sdl.gl_context = SDL_GL_CreateContext(sdl.window);
 	if( sdl.gl_context == nullptr) SDL_die( "SDL_GL_CreateContext");
 
+	initGL();
 
 	SDL_GL_SetSwapInterval(1);
-	setViewport(1200, 800);
-    glShadeModel( GL_SMOOTH );
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-	glDisable(GL_DEPTH_TEST);
-
-	cout << glGetString(GL_VENDOR) << "\n";
-	cout << glGetString(GL_RENDERER) << "\n";
-	cout << glGetString(GL_VERSION) << "\n";
-	cout << glGetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
+	setViewport(800, 600);
 }
-
-
-void render() {
-
-	static unsigned int frame_number = 0;
-
-	frame_number++;
-
-
-    glClearColor( 0.1f, 0.0f, 0.1f, 1.0f );
-    glClear( GL_COLOR_BUFFER_BIT );
-	glLoadIdentity();
-	glScalef(0.3, 0.3, 0.3);
-
-	glRotatef(frame_number/-2.0, 0.0, 0.0, 1.0 );
-
-	glTranslatef(0, 1.0, 0.0);
-
-
-	glColor3f(1.0, 1.0, 1.0);
-    glBegin( GL_TRIANGLES );            /* Drawing Using Triangles */
-      glVertex3f(  0.0f,  1.0f, 0.0f ); /* Top */
-      glVertex3f( -1.0f, -1.0f, 0.0f ); /* Bottom Left */
-      glVertex3f(  1.0f, -1.0f, 0.0f ); /* Bottom Right */
-    glEnd( );                           /* Finished Drawing The Triangle */
-
-	glTranslatef(0, -2.0, 0.0);
-	glColor3f(1.0, 0.0, 0.0);
-    glBegin( GL_QUADS );                /* Draw A Quad */
-      glVertex3f( -1.0f,  1.0f, 0.0f ); /* Top Left */
-      glVertex3f(  1.0f,  1.0f, 0.0f ); /* Top Right */
-      glVertex3f(  1.0f, -1.0f, 0.0f ); /* Bottom Right */
-      glVertex3f( -1.0f, -1.0f, 0.0f ); /* Bottom Left */
-    glEnd( );                           /* Done Drawing The Quad */
-
-	glFlush();
-	glLoadIdentity();
-}
-
 
 
 int main(int argc, char *argv[]) {
