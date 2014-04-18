@@ -1,7 +1,8 @@
 void initGL() {
-	glShadeModel( GL_SMOOTH );
+	glShadeModel( GL_FLAT );
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 	glDisable(GL_DEPTH_TEST);
+
 
 	std::cout << glGetString(GL_VENDOR) << "\n";
 	std::cout << glGetString(GL_RENDERER) << "\n";
@@ -31,28 +32,47 @@ void render() {
 
     glClear( GL_COLOR_BUFFER_BIT );
 	glLoadIdentity();
-	glScalef(0.3, 0.3, 0.3);
 
-	glRotatef(frame_number/-2.0, 0.0, 0.0, 1.0 );
+	GLfloat vertices[] = { 0.0, 0.0, 0.0,
+						   1.0, 0.0, 0.0,
+						   0.0, 1.0, 0.0,
+						   1.0, 1.0, 0.0,
+						   0.5, 2.0, 0.0 };
 
-	glTranslatef(0, 1.0, 0.0);
+	GLubyte indices[]  = { 0, 1, 2,
+						   3, 2, 1,
+						   2, 3, 4 };
+
+	GLfloat colors[] = { 1.0, 1.0, 1.0,
+						 1.0, 1.0, 1.0,
+						 1.0, 1.0, 1.0,
+						 1.0, 1.0, 1.0,
+						 1.0, 0.0, 0.0 };
 
 
-	glColor3f(1.0, 1.0, 1.0);
-    glBegin( GL_TRIANGLES );            /* Drawing Using Triangles */
-      glVertex3f(  0.0f,  1.0f, 0.0f ); /* Top */
-      glVertex3f( -1.0f, -1.0f, 0.0f ); /* Bottom Left */
-      glVertex3f(  1.0f, -1.0f, 0.0f ); /* Bottom Right */
-    glEnd( );                           /* Finished Drawing The Triangle */
 
-	glTranslatef(0, -2.0, 0.0);
-	glColor3f(1.0, 0.0, 0.0);
-    glBegin( GL_QUADS );                /* Draw A Quad */
-      glVertex3f( -1.0f,  1.0f, 0.0f ); /* Top Left */
-      glVertex3f(  1.0f,  1.0f, 0.0f ); /* Top Right */
-      glVertex3f(  1.0f, -1.0f, 0.0f ); /* Bottom Right */
-      glVertex3f( -1.0f, -1.0f, 0.0f ); /* Bottom Left */
-    glEnd( );                           /* Done Drawing The Quad */
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, vertices);
+	glColorPointer(3, GL_FLOAT, 0, colors);
+
+	for( size_t i = 0; i < 10; i++) {
+		glTranslatef( ((i*23+17)%11) / 11.0-0.5, ((i*26+1)%11) / 11.0-0.5, 0.0);
+		glScalef(0.1, 0.1, 0.1);
+		glRotatef(frame_number/-2.0*(i+3), 0.0, 0.0, 1.0 );
+		glTranslatef( -0.5, -0.75, 0.0);
+		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_BYTE, indices);
+		glLoadIdentity();
+	}
+
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
+
+
+
 
 	glFlush();
 	glLoadIdentity();

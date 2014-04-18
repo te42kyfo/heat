@@ -50,9 +50,8 @@ void initDisplay(SDL_State& sdl) {
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 
-
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 
     // create the sdl2 window
@@ -110,7 +109,7 @@ int main(int argc, char *argv[]) {
 		render();
 		SDL_GL_SwapWindow(sdl.window);
 
-		SDL_Delay(35);
+		SDL_Delay(20);
 
 		double new_frame_time = dtime();
 		std::cout << 1.0 / (new_frame_time - frame_time) << "\n";
