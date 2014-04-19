@@ -11,6 +11,7 @@
 #include <sys/time.h>
 
 #include "render.hpp"
+#include "simulation.hpp"
 
 using namespace std;
 
@@ -50,9 +51,9 @@ void initDisplay(SDL_State& sdl) {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 
-    sdl.window = SDL_CreateWindow( "HEAT", SDL_WINDOWPOS_UNDEFINED,
-								   SDL_WINDOWPOS_UNDEFINED, 800, 600,
-								   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+    sdl.window = SDL_CreateWindow
+		( "HEAT", SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED, 800, 600,
+		  SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if( sdl.window == nullptr) SDL_die("SDL_CreateWindow");
 
@@ -68,6 +69,33 @@ int main(int argc, char *argv[]) {
 
 	SDL_State sdl;
 	Render render;
+	Simulation sim(2.0, 2.0, 2.0,
+				   100, 100, 100);
+
+
+	sim.fillCube( sim.temp_A,
+				  sim.p2g(0.2, 0), sim.p2g(0.2, 1), sim.p2g(0.0, 2),
+				  sim.p2g(0.8, 0), sim.p2g(0.8, 1), sim.p2g(1.0, 2),
+				  1.0);
+
+	sim.fillCube( sim.temp_A,
+				  sim.p2g(0.4, 0), sim.p2g(0.3, 1), sim.p2g(0.0, 2),
+				  sim.p2g(0.6, 0), sim.p2g(0.7, 1), sim.p2g(1.0, 2),
+				  0.1);
+
+	sim.fillCube( sim.temp_A,
+				  sim.p2g(0.4, 0), sim.p2g(0.49, 1), sim.p2g(0.0, 2),
+				  sim.p2g(0.5, 0), sim.p2g(0.51, 1), sim.p2g(0.2, 2),
+				  3);
+
+
+	render.grid_data = ( sim.temp_A.data() +
+						 sim.idx( sim.p2g(0.0, 0), sim.p2g(0.0, 1), sim.p2g(0.5, 2) ));
+	cout << "startadress:"
+		 << sim.idx( sim.p2g(0.0, 0), sim.p2g(0.0, 1), sim.p2g(0.5, 2) ) << "\n";
+
+	render.grid_width = sim.grid_dim[0];
+	render.grid_height = sim.grid_dim[1];
 
 	initDisplay(sdl);
 	render.initGL();
@@ -100,6 +128,9 @@ int main(int argc, char *argv[]) {
 			}
 
 
+		}
+		for( size_t i = 0; i < 1; i++) {
+			sim.step();
 		}
 
 		render.render();

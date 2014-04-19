@@ -3,9 +3,21 @@
 uniform sampler2D tex;
 
 void main(void){
-	gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-	gl_FragColor.r = texture2D(tex, gl_TexCoord[0].st ).r;
-	//gl_FragColor.st = gl_TexCoord[0].st;
+
+	float texValue = texture2D(tex, gl_TexCoord[0].st ).r;
+
+	if( texValue < 0.5) {
+		gl_FragColor = vec4(texValue*1.5,
+							0,
+							0.0,
+							1.0);
+	} else {
+		gl_FragColor = vec4( 0.25 + texValue,
+							(texValue-0.5)*4,
+							(texValue-0.5),
+							1.0);
+	}
+
+
+
 }
-
-

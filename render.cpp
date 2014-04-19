@@ -67,15 +67,7 @@ void Render::initGL() {
 	color_program = loadShader( "color.vert", "color.frag" );
 	frame_number = 0;
 
-	grid_width = 100;
-	grid_height = 100;
-	grid_data = vector<float>( grid_width*grid_height, 0.0);
 
-	for( size_t y = 0; y < grid_height; y++) {
-		for( size_t x = 0; x < grid_width; x++) {
-			grid_data[y* grid_width + x] = sin( (x+y) / 10.0)+1;
-		}
-	}
 
 }
 
@@ -124,7 +116,7 @@ void Render::render() {
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_R32F,
 				  grid_width, grid_height, 0,
 				  GL_RED, GL_FLOAT,
-				  grid_data.data());
+				  grid_data);
 
 
 
@@ -133,8 +125,8 @@ void Render::render() {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture( GL_TEXTURE_2D,  texId);
     glUniform1i( texUloc, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 
 
