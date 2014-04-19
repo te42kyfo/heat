@@ -17,7 +17,7 @@ public:
 	void render();
 
 	std::shared_ptr<Grid3D<float>> grid;
-
+	float slice_depth;
 };
 
 

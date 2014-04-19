@@ -76,12 +76,12 @@ int main(int argc, char *argv[]) {
 							  1.0f, 1.0f, 1.0f,
 							  0.0f);
 
-	sim.source->fillPhysCube(  0.4f, 0.4f, 0.4f,
-							   0.6f, 0.6f, 0.8f,
+	sim.source->fillPhysCube(  0.2f, 0.2f, 0.4f,
+							   0.8f, 0.8f, 0.6f,
 							   -300.0f);
 
-	sim.source->fillPhysCube(  0.42f, 0.42f, 0.4f,
-							   0.58f, 0.58f, 0.8f,
+	sim.source->fillPhysCube(  0.22f, 0.22f, 0.4f,
+							   0.78f, 0.78f, 0.8f,
 							   0.0f);
 
 
@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 
 
 	render.grid = sim.temp_A;
-							
+	render.slice_depth = 0.5;
 
 	initDisplay(sdl);
 	render.initGL();
@@ -114,6 +114,12 @@ int main(int argc, char *argv[]) {
 				case SDLK_q:
 				case SDLK_ESCAPE:
 					quit = true;
+					break;
+				case SDLK_UP:
+					render.slice_depth += 0.1;
+					break;
+				case SDLK_DOWN:
+					render.slice_depth -= 0.1;
 					break;
 				default:
 					break;

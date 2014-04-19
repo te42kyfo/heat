@@ -84,10 +84,6 @@ void Render::setViewport( int width, int height ) {
 
 void Render::render() {
 
-
-
-
-
 	frame_number++;
 
     glClear( GL_COLOR_BUFFER_BIT );
@@ -109,6 +105,11 @@ void Render::render() {
 
 
 
+	if( slice_depth < 0.0) slice_depth = 0;
+	if( slice_depth >= grid->phys_dim[2]) slice_depth = grid->phys_dim[2];
+
+	size_t slice_offset = grid->p2g(slice_depth, 2);
+	if( slice_offset >= grid->grid_dim[2]) slice_offset = grid->grid_dim[2]-1;
 
 	GLuint texId;
 	glGenTextures(1, &texId);
@@ -116,7 +117,7 @@ void Render::render() {
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_R32F,
 				  grid->grid_dim[0], grid->grid_dim[1], 0,
 				  GL_RED, GL_FLOAT,
-				  grid->data.data() + grid->pidx( 0.0, 0.0, 0.5 ) );
+				  grid->data.data() + grid->idx( 0, 0, slice_offset ) );
 
 
 
