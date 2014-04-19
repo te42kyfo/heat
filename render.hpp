@@ -1,5 +1,6 @@
 #include <vector>
-
+#include <memory>
+#include "grid3d.hpp"
 
 class Render {
 private:
@@ -15,9 +16,7 @@ public:
 	void initGL();
 	void render();
 
-	float * grid_data;
-	size_t grid_height;
-	size_t grid_width;
+	std::shared_ptr<Grid3D<float>> grid;
 
 };
 

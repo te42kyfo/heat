@@ -1,20 +1,7 @@
 #include "simulation.hpp"
 #include "iostream"
 
-void Simulation::fillCube( std::vector<float>& grid,
-						   size_t x1, size_t y1, size_t z1,
-						   size_t x2, size_t y2, size_t z2,
-						   float value) {
 
-
-	for( size_t z = z1; z < z2; z++) {
-		for( size_t y = y1; y < y2; y++) {
-			for(size_t x = x1; x < x2; x++) {
-				grid[idx(x,y,z)] = value;
-			}
-		}
-	}
-}
 
 
 constexpr size_t didx(size_t x, size_t y, size_t z,
@@ -24,8 +11,9 @@ constexpr size_t didx(size_t x, size_t y, size_t z,
 
 void Simulation::step() {
 
-	float* pA = temp_A.data();
-	float* pB = temp_B.data();
+	float* pA = temp_A->data.data();
+	float* pB = temp_B->data.data();
+	float* pSource = source->data.data();
 
 
 	size_t const gd0 = grid_dim[0];
@@ -52,14 +40,13 @@ void Simulation::step() {
 		for( size_t y = 1; y < grid_dim[1]-1; y++) {
 			for(size_t x = 1; x < grid_dim[0]-1; x++) {
 				pB [didx(x, y, z, gd0, gd1)] =
-					kx * ( pA[didx(x+1,y  ,z  , gd0, gd1)] +
-						   pA[didx(x-1,y  ,z  , gd0, gd1)] ) +
-					ky * ( pA[didx(x  ,y+1,z  , gd0, gd1)] +
-						   pA[didx(x  ,y-1,z  , gd0, gd1)] ) +
-					kz * ( pA[didx(x  ,y  ,z+1, gd0, gd1)] +
-						   pA[didx(x  ,y  ,z-1, gd0, gd1)] ) -
-					kr*source[didx(x  ,y  ,z-1, gd0, gd1)];
-
+					kx * (  pA[didx(x+1,y  ,z  , gd0, gd1)] +
+						    pA[didx(x-1,y  ,z  , gd0, gd1)] ) +
+					ky * (  pA[didx(x  ,y+1,z  , gd0, gd1)] +
+						    pA[didx(x  ,y-1,z  , gd0, gd1)] ) +
+					kz * (  pA[didx(x  ,y  ,z+1, gd0, gd1)] +
+						    pA[didx(x  ,y  ,z-1, gd0, gd1)] ) -
+					kr*pSource[didx(x  ,y  ,z  , gd0, gd1)];
 			}
 		}
 	}
