@@ -38,23 +38,18 @@ void initDisplay(SDL_State& sdl) {
 
 	if( SDL_Init(SDL_INIT_VIDEO) == -1) SDL_die( "SDL_Init" );
 
-
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 
-    // create the sdl2 window
     sdl.window = SDL_CreateWindow( "HEAT", SDL_WINDOWPOS_UNDEFINED,
 								   SDL_WINDOWPOS_UNDEFINED, 800, 600,
 								   SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
@@ -81,7 +76,7 @@ int main(int argc, char *argv[]) {
 
 	SDL_Event e;
 	bool quit = false;
-	double frame_time = dtime();
+	//double frame_time = dtime();
 	while (!quit){
 		while (SDL_PollEvent(&e)){
 			if (e.type == SDL_QUIT){
@@ -112,9 +107,9 @@ int main(int argc, char *argv[]) {
 
 		//	SDL_Delay(20);
 
-		double new_frame_time = dtime();
-		std::cout << 1.0 / (new_frame_time - frame_time) << "\n";
-		frame_time = dtime();
+		//double new_frame_time = dtime();
+		//std::cout << 1.0 / (new_frame_time - frame_time) << "\n";
+		//frame_time = dtime();
 	}
 
 

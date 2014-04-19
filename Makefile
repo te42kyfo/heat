@@ -1,4 +1,4 @@
-.PHONY: all main clean
+.PHONY: all main clean debug
 NAME=heat
 CXX=g++
 LIB= `sdl2-config --libs` -lGL -lGLEW
@@ -12,6 +12,9 @@ all: $(NAME)
 
 run: $(NAME)
 	./$(NAME)
+
+debug: $(SRC) $(HEADERS)
+	$(CXX) $(CPPFLAGS) -g $(INCLUDE) $(SRC) -o $(NAME) $(LIB)
 
 $(NAME): $(SRC) $(HEADERS)
 	$(CXX) $(CPPFLAGS) $(INCLUDE) $(SRC) -o $(NAME) $(LIB)

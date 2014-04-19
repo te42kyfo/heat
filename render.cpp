@@ -4,7 +4,7 @@
 #include <iostream>
 //#include <SDL2/SDL_opengl.h>
 #include <GL/glew.h>
-
+#include <cmath>
 #include "render.hpp"
 using namespace std;
 
@@ -66,6 +66,17 @@ void Render::initGL() {
 
 	color_program = loadShader( "color.vert", "color.frag" );
 	frame_number = 0;
+
+	grid_width = 100;
+	grid_height = 100;
+	grid_data = vector<float>( grid_width*grid_height, 0.0);
+
+	for( size_t y = 0; y < grid_height; y++) {
+		for( size_t x = 0; x < grid_width; x++) {
+			grid_data[y* grid_width + x] = sin( (x+y) / 10.0)+1;
+		}
+	}
+
 }
 
 void Render::setViewport( int width, int height ) {
@@ -81,30 +92,68 @@ void Render::setViewport( int width, int height ) {
 
 void Render::render() {
 
+
+
+
+
 	frame_number++;
 
     glClear( GL_COLOR_BUFFER_BIT );
 	glLoadIdentity();
 
 
-	glColor3f(1.0, 1.0, 1.0);
 	vector<GLfloat> vertices = { -1.0, -1.0, 0.0,
 								 1.0, -1.0, 0.0,
 								 -1.0,  1.0, 0.0,
 								 1.0,  1.0, 0.0 };
+	vector<GLfloat> texCoords = { 0.0, 0.0,
+								  1.0, 0.0,
+								  0.0, 1.0,
+								  1.0, 1.0};
 
 	vector<GLubyte> indices  = { 0, 1, 2,
 								 1, 2, 3 };
 
 
+
+
+
+	GLuint texId;
+	glGenTextures(1, &texId);
+	glBindTexture( GL_TEXTURE_2D, texId);
+	glTexImage2D( GL_TEXTURE_2D, 0, GL_R32F,
+				  grid_width, grid_height, 0,
+				  GL_RED, GL_FLOAT,
+				  grid_data.data());
+
+
+
+
+	GLint texUloc = glGetUniformLocation(color_program, "tex");
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture( GL_TEXTURE_2D,  texId);
+    glUniform1i( texUloc, 0);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+
+
 	glUseProgram(color_program);
 
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data() );
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_BYTE, indices.data() );
-	glDisableClientState(GL_VERTEX_ARRAY);
 
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glVertexPointer(3, GL_FLOAT, 0, vertices.data() );
+	glTexCoordPointer(2, GL_FLOAT, 0, texCoords.data() );
+
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_BYTE, indices.data() );
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glDeleteTextures(1, &texId);
 
 	glFlush();
 	glLoadIdentity();
