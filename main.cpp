@@ -69,29 +69,36 @@ int main(int argc, char *argv[]) {
 
 	SDL_State sdl;
 	Render render;
-	Simulation sim(1.0, 1.0, 1.0,
-				   200, 200, 200);
+	Simulation sim( 1.0, 1.0, 1.0,
+					100, 100, 100);
+
+	sim.fillCube( sim.source,
+				  sim.p2g(0.0, 0), sim.p2g(0.0, 1), sim.p2g(0.0, 2),
+				  sim.p2g(1.0, 0), sim.p2g(1.0, 1), sim.p2g(1.0, 2),
+				  0.0);
+
+	sim.fillCube( sim.source,
+				  sim.p2g(0.4, 0), sim.p2g(0.4, 1), sim.p2g(0.1, 2),
+				  sim.p2g(0.6, 0), sim.p2g(0.6, 1), sim.p2g(0.9, 2),
+				  -300.0);
+
+	sim.fillCube( sim.source,
+				  sim.p2g(0.42, 0), sim.p2g(0.42, 1), sim.p2g(0.0, 2),
+				  sim.p2g(0.58, 0), sim.p2g(0.58, 1), sim.p2g(1.0, 2),
+				  0.0);
 
 
 	sim.fillCube( sim.temp_A,
-				  sim.p2g(0.2, 0), sim.p2g(0.2, 1), sim.p2g(0.0, 2),
-				  sim.p2g(0.8, 0), sim.p2g(0.8, 1), sim.p2g(1.0, 2),
-				  1.0);
+				  sim.p2g(0.0, 0), sim.p2g(0.0, 1), sim.p2g(0.0, 2),
+				  sim.p2g(1.0, 0), sim.p2g(1.0, 1), sim.p2g(1.0, 2),
+				  0.0);
 
-	sim.fillCube( sim.temp_A,
-				  sim.p2g(0.4, 0), sim.p2g(0.3, 1), sim.p2g(0.0, 2),
-				  sim.p2g(0.6, 0), sim.p2g(0.7, 1), sim.p2g(1.0, 2),
-				  0.1);
 
-	sim.fillCube( sim.temp_A,
-				  sim.p2g(0.4, 0), sim.p2g(0.49, 1), sim.p2g(0.0, 2),
-				  sim.p2g(0.5, 0), sim.p2g(0.51, 1), sim.p2g(0.2, 2),
-				  3);
 
 
 	render.grid_data = ( sim.temp_A.data() + sim.idx( sim.p2g(0.0, 0),
 													  sim.p2g(0.0, 1),
-													  sim.p2g(0.5, 2) ));
+													  sim.p2g(0.9, 2) ));
 
 
 	render.grid_width = sim.grid_dim[0];

@@ -2,6 +2,16 @@
 
 using namespace std;
 
+
+/*
+template<class T>
+grid3D {
+	std::vector<T> data;
+	const size_t grid_dim[3];
+	const float phys_dim[3];*/
+
+
+
 class Simulation {
 public:
 	Simulation( float pd1, float pd2, float pd3,
