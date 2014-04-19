@@ -64,10 +64,7 @@ void initDisplay(SDL_State& sdl) {
 	sdl.gl_context = SDL_GL_CreateContext(sdl.window);
 	if( sdl.gl_context == nullptr) SDL_die( "SDL_GL_CreateContext");
 
-	initGL();
-
 	SDL_GL_SetSwapInterval(1);
-	setViewport(800, 600);
 }
 
 
@@ -75,8 +72,12 @@ int main(int argc, char *argv[]) {
 
 
 	SDL_State sdl;
+	Render render;
 
 	initDisplay(sdl);
+	render.initGL();
+	render.setViewport(800, 600);
+
 
 	SDL_Event e;
 	bool quit = false;
@@ -99,17 +100,17 @@ int main(int argc, char *argv[]) {
 			}
 			if(e.type == SDL_WINDOWEVENT) {
 				if( e.window.event == SDL_WINDOWEVENT_RESIZED) {
-					setViewport( e.window.data1, e.window.data2 );
+					render.setViewport( e.window.data1, e.window.data2 );
 				}
 			}
 
 
 		}
 
-		render();
+		render.render();
 		SDL_GL_SwapWindow(sdl.window);
 
-		SDL_Delay(20);
+		//	SDL_Delay(20);
 
 		double new_frame_time = dtime();
 		std::cout << 1.0 / (new_frame_time - frame_time) << "\n";

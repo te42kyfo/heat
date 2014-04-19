@@ -1,9 +1,9 @@
 .PHONY: all main clean
 NAME=heat
 CXX=g++
-LIB= `sdl2-config --libs` -lGL
+LIB= `sdl2-config --libs` -lGL -lGLEW
 CPPFLAGS= -O3 -Wall -Werror -Wshadow -ansi -fopenmp -std=c++0x `sdl2-config --cflags`
-SRC= main.cpp
+SRC= main.cpp render.cpp
 
 HEADERS= $(shell find . -iname "*.hpp")
 
