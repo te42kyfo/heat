@@ -69,8 +69,8 @@ int main(int argc, char *argv[]) {
 
 	SDL_State sdl;
 	Render render;
-	Simulation sim(2.0, 2.0, 2.0,
-				   100, 100, 100);
+	Simulation sim(1.0, 1.0, 1.0,
+				   200, 200, 200);
 
 
 	sim.fillCube( sim.temp_A,
@@ -89,10 +89,10 @@ int main(int argc, char *argv[]) {
 				  3);
 
 
-	render.grid_data = ( sim.temp_A.data() +
-						 sim.idx( sim.p2g(0.0, 0), sim.p2g(0.0, 1), sim.p2g(0.5, 2) ));
-	cout << "startadress:"
-		 << sim.idx( sim.p2g(0.0, 0), sim.p2g(0.0, 1), sim.p2g(0.5, 2) ) << "\n";
+	render.grid_data = ( sim.temp_A.data() + sim.idx( sim.p2g(0.0, 0),
+													  sim.p2g(0.0, 1),
+													  sim.p2g(0.5, 2) ));
+
 
 	render.grid_width = sim.grid_dim[0];
 	render.grid_height = sim.grid_dim[1];
@@ -129,9 +129,16 @@ int main(int argc, char *argv[]) {
 
 
 		}
-		for( size_t i = 0; i < 1; i++) {
+		double start = dtime();
+		for( size_t i = 0; i < 10; i++) {
 			sim.step();
 		}
+		double end = dtime();
+
+		std::cout << (10*6*(sim.grid_dim[0]*
+						 sim.grid_dim[1]*
+						 sim.grid_dim[2])) / (end-start) * 1.0e-9 
+				  << "GFlop/s\n";
 
 		render.render();
 		SDL_GL_SwapWindow(sdl.window);

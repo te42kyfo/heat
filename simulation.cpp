@@ -23,20 +23,29 @@ void Simulation::step() {
 	float* pB = temp_B.data();
 
 
-
+	#pragma omp parallel for
 	for( size_t z = 1; z < grid_dim[2]-1; z++) {
 		for( size_t y = 1; y < grid_dim[1]-1; y++) {
 			for(size_t x = 1; x < grid_dim[0]-1; x++) {
-				pB[idx(x,y,z)] = (1.0f/6.0f) *
-					( pA[idx(x+1,y  ,z  )] +
-					  pA[idx(x-1,y  ,z  )] +
-					  pA[idx(x  ,y+1,z  )] +
-					  pA[idx(x  ,y-1,z  )] +
-					  pA[idx(x  ,y  ,z+1)] +
-					  pA[idx(x  ,y  ,z-1)] );
+				pB [grid_dim[0]*grid_dim[1]*z +
+					grid_dim[0]*y + x ]
+					= (1.0f/6.0f) *
+					( pA[grid_dim[0]*grid_dim[1]*(z) +
+						 grid_dim[0]*(y) +x+1] +
+					  pA[grid_dim[0]*grid_dim[1]*(z) +
+						 grid_dim[0]*(y) +x-1] +
+					  pA[grid_dim[0]*grid_dim[1]*(z) +
+						 grid_dim[0]*(y+1) +x] +
+					  pA[grid_dim[0]*grid_dim[1]*(z) +
+						 grid_dim[0]*(y-1) +x] +
+					  pA[grid_dim[0]*grid_dim[1]*(z+1) +
+						 grid_dim[0]*(y) +x] +
+					  pA[grid_dim[0]*grid_dim[1]*(z-1) +
+						 grid_dim[0]*(y) +x] );
 			}
 		}
 	}
+
 	swap( temp_A, temp_B );
 
 

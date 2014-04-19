@@ -2,7 +2,7 @@
 NAME=heat
 CXX=g++
 LIB= `sdl2-config --libs` -lGL -lGLEW
-CPPFLAGS= -march=native -O3 -Wall -Werror -Wshadow -ansi -fopenmp -std=c++1y `sdl2-config --cflags`
+CPPFLAGS= -Ofast -Wall -Werror -Wshadow -ansi -fopenmp -std=c++1y `sdl2-config --cflags`
 SRC= main.cpp render.cpp simulation.cpp
 
 HEADERS= $(shell find . -iname "*.hpp")
