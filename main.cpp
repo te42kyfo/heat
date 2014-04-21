@@ -72,22 +72,41 @@ int main(int argc, char *argv[]) {
 	Simulation sim( 1.0, 1.0, 1.0,
 					100, 100, 100);
 
+
+
+
+
+	sim.lambda->fillPhysCube( 0.0f, 0.0f, 0.0f,
+							  1.0f, 1.0f, 1.0f,
+							  0.1);
+
+
+	sim.lambda->fillPhysCube( 0.3f, 0.3f, 0.0f,
+							  0.7f, 0.7f, 1.0f,
+							  1.0f);
+
+	sim.lambda->fillPhysCube( 0.4f, 0.4f, 0.0f,
+							  0.6f, 0.6f, 1.0f,
+							  0.011f);
+
+
+	/*
 	sim.source->fillPhysCube( 0.0f, 0.0f, 0.0f,
-							  1.0f, 1.0f, 1.0f,
-							  0.0f);
+							  0.3f, 1.0f, 1.0f,
+							  -100000.0f);
+	*/
 
-	sim.source->fillPhysCube(  0.2f, 0.2f, 0.4f,
-							   0.8f, 0.8f, 0.6f,
-							   -300.0f);
+	sim.source->fillPhysCube( 0.4f, 0.4f, 0.0f,
+							  0.6f, 0.6f, 1.0f,
+							  -400.0f);
+	sim.source->fillPhysCube( 0.4f, 0.47f, 0.47f,
+							  0.42f, 0.53f, 0.53f,
+							  -50000000.0f);
 
-	sim.source->fillPhysCube(  0.22f, 0.22f, 0.4f,
-							   0.78f, 0.78f, 0.8f,
-							   0.0f);
 
-
-	sim.temp_A->fillPhysCube( 0.0f, 0.0f, 0.0f,
-							  1.0f, 1.0f, 1.0f,
-							  0.0f);
+	sim.capacity->fillPhysCube( 0.0f, 0.0f, 0.0f,
+								1.0f, 1.0f, 1.0f,
+								1.0f);
 
 
 
@@ -134,14 +153,14 @@ int main(int argc, char *argv[]) {
 
 		}
 		double start = dtime();
-		for( size_t i = 0; i < 10; i++) {
-			sim.step();
-		}
+
+		sim.step();
+
 		double end = dtime();
 
-		std::cout << (10*6*(sim.grid_dim[0]*
+		std::cout << ( 10*(sim.grid_dim[0]*
 						 sim.grid_dim[1]*
-						 sim.grid_dim[2])) / (end-start) * 1.0e-9 
+						 sim.grid_dim[2])) / (end-start) * 1.0e-9
 				  << "GFlop/s\n";
 
 		render.render();

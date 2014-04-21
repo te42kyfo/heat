@@ -18,7 +18,9 @@ public:
 		lambda( std::make_shared<Grid3D<float>> ( pd1, pd2, pd3,
 												  d1, d2, d3)),
 		source( std::make_shared<Grid3D<float>> ( pd1, pd2, pd3,
-												  d1, d2, d3)) {};
+												  d1, d2, d3)),
+		capacity( std::make_shared<Grid3D<float>> ( pd1, pd2, pd3,
+													d1, d2, d3)) {};
 
 
 
@@ -32,6 +34,6 @@ public:
 	std::shared_ptr<Grid3D<float>> temp_B;
 	std::shared_ptr<Grid3D<float>> lambda;
 	std::shared_ptr<Grid3D<float>> source;
-
+	std::shared_ptr<Grid3D<float>> capacity;
 
 };
