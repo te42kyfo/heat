@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
 	SDL_State sdl;
 	Render render;
 	Simulation sim( 1.0, 1.0, 1.0,
-					100, 100, 100);
+					80, 80, 80);
 
 
 
@@ -99,9 +99,10 @@ int main(int argc, char *argv[]) {
 	sim.source->fillPhysCube( 0.4f, 0.4f, 0.0f,
 							  0.6f, 0.6f, 1.0f,
 							  -400.0f);
+
 	sim.source->fillPhysCube( 0.4f, 0.47f, 0.47f,
 							  0.42f, 0.53f, 0.53f,
-							  -50000000.0f);
+							  -30000000.0f);
 
 
 	sim.capacity->fillPhysCube( 0.0f, 0.0f, 0.0f,
@@ -153,9 +154,9 @@ int main(int argc, char *argv[]) {
 
 		}
 		double start = dtime();
-
-		sim.step();
-
+		for(size_t i = 0; i < 30; i++) {
+			sim.step();
+		}
 		double end = dtime();
 
 		std::cout << ( 10*(sim.grid_dim[0]*

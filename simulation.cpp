@@ -71,5 +71,4 @@ void Simulation::step() {
 
 	swap( temp_A, temp_B );
 
-
 }
