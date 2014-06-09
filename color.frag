@@ -6,7 +6,11 @@ void main(void){
 
 	float texValue = texture2D(tex, gl_TexCoord[0].st ).r;
 
-	texValue *= 0.001;
+
+
+	texValue = log(texValue);
+
+	texValue *= 0.2;
 
 	if( texValue < 0.5) {
 		gl_FragColor = vec4( texValue*1.5,

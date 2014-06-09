@@ -1,24 +1,22 @@
 .PHONY: all main clean debug
-NAME=heat
+
 CXX=g++
 LIB= `sdl2-config --libs` -lGL -lGLEW
 CPPFLAGS= -Ofast -Wall -Werror -Wshadow -ansi -fopenmp -std=c++1y `sdl2-config --cflags`
-SRC= main.cpp render.cpp simulation.cpp
+HEAT_SRC= main.cpp sdl_gl.cpp simulation.cpp draw_slice.cpp
 
 HEADERS= $(shell find . -iname "*.hpp")
 
-all: $(NAME)
+all: heat
 
 
-run: $(NAME)
-	./$(NAME)
+run: heat
+	./heat
 
-debug: $(SRC) $(HEADERS)
-	$(CXX) $(CPPFLAGS) -g $(INCLUDE) $(SRC) -o $(NAME) $(LIB)
 
-$(NAME): $(SRC) $(HEADERS)
-	$(CXX) $(CPPFLAGS) $(INCLUDE) $(SRC) -o $(NAME) $(LIB)
+heat: $(HEAT_SRC) $(HEADERS)
+	$(CXX) $(CPPFLAGS) $(INCLUDE) $(HEAT_SRC) -o heat $(LIB)
 
 
 clean:
-	rm -f $(NAME)
+	rm -f heat
