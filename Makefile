@@ -3,9 +3,9 @@
 CXX=g++
 LIB= `sdl2-config --libs` -lGL -lGLEW
 CPPFLAGS= -Ofast -Wall -Werror -Wshadow -ansi -fopenmp -std=c++1y `sdl2-config --cflags`
-HEAT_SRC= main.cpp sdl_gl.cpp simulation.cpp draw_slice.cpp
-
+HEAT_SRC= main.cpp simulation.cpp ./vis/sdl_gl.cpp  ./vis/draw_slice.cpp
 HEADERS= $(shell find . -iname "*.hpp")
+INCLUDE= -I./vis/
 
 all: heat
 

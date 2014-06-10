@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
 	sim.source->fillPhysCube( 0.4f, 0.47f, 0.47f,
 							  0.42f, 0.53f, 0.53f,
-							  -30000000.0f);
+							  -10000000.0f);
 
 
 	sim.capacity->fillPhysCube( 0.0f, 0.0f, 0.0f,
@@ -66,12 +66,10 @@ int main(int argc, char *argv[]) {
 
 	vis.initDisplay();
 	vis.initDrawSlice();
-
-
-	vis.grid = sim.temp_A;
-
 	vis.setViewport(800, 600);
 
+	float slice_depth = 0.5;
+	auto grid = sim.temp_A;
 
 	SDL_Event e;
 	bool quit = false;
@@ -89,15 +87,18 @@ int main(int argc, char *argv[]) {
 					quit = true;
 					break;
 				case SDLK_UP:
-					vis.slice_depth += 0.1;
+					slice_depth += 0.1;
 					break;
 				case SDLK_DOWN:
-					vis.slice_depth -= 0.1;
+					slice_depth -= 0.1;
 					break;
 				default:
 					break;
 				}
 			}
+
+
+
 			if(e.type == SDL_WINDOWEVENT) {
 				if( e.window.event == SDL_WINDOWEVENT_RESIZED) {
 					vis.setViewport( e.window.data1, e.window.data2 );
@@ -110,7 +111,16 @@ int main(int argc, char *argv[]) {
 		for(size_t i = 0; i < 1; i++) {
 			sim.step();
 		}
-		vis.drawSlice();
+
+
+		if( slice_depth < 0.0) slice_depth = 0;
+		if( slice_depth >= grid->phys_dim[2]) slice_depth = grid->phys_dim[2];
+
+		size_t slice_offset = grid->p2g(slice_depth, 2);
+		if( slice_offset >= grid->grid_dim[2]) slice_offset = grid->grid_dim[2]-1;
+
+		vis.drawSlice(grid->data.data() + grid->idx( 0, 0, slice_offset ),
+					  grid->grid_dim[0], grid->grid_dim[1]);
 		SDL_GL_SwapWindow( vis.window);
 
 	}

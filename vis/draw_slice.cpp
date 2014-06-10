@@ -14,13 +14,13 @@ void SdlGl::initDrawSlice() {
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
 	glDisable(GL_DEPTH_TEST);
 
-	color_program = loadShader( "color.vert", "color.frag" );
+	color_program = loadShader( "./vis/color.vert", "./vis/color.frag" );
 
 }
 
 
 
-void SdlGl::drawSlice() {
+void SdlGl::drawSlice(float* slice_ptr, size_t width, size_t height) {
 
 	frame_number++;
 
@@ -41,19 +41,15 @@ void SdlGl::drawSlice() {
 								 1, 2, 3 };
 
 
-	if( slice_depth < 0.0) slice_depth = 0;
-	if( slice_depth >= grid->phys_dim[2]) slice_depth = grid->phys_dim[2];
 
-	size_t slice_offset = grid->p2g(slice_depth, 2);
-	if( slice_offset >= grid->grid_dim[2]) slice_offset = grid->grid_dim[2]-1;
 
 	GLuint texId;
 	glGenTextures(1, &texId);
 	glBindTexture( GL_TEXTURE_2D, texId);
 	glTexImage2D( GL_TEXTURE_2D, 0, GL_R32F,
-				  grid->grid_dim[0], grid->grid_dim[1], 0,
+				  width, height, 0,
 				  GL_RED, GL_FLOAT,
-				  grid->data.data() + grid->idx( 0, 0, slice_offset ) );
+				  slice_ptr);
 
 
 

@@ -8,7 +8,6 @@
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
-#include "grid3d.hpp"
 
 class SdlGl {
 public:
@@ -22,7 +21,7 @@ public:
 
 
 	void initDrawSlice();
-	void drawSlice();
+	void drawSlice(float* slice_ptr, size_t width, size_t height);
 
 
 
@@ -33,7 +32,6 @@ public:
 	// drawSlice
 	GLuint color_program;
 	float slice_depth = 0.5;
-	std::shared_ptr<Grid3D<float>> grid;
 
 };
 
