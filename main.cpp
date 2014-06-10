@@ -73,6 +73,8 @@ int main(int argc, char *argv[]) {
 
 	SDL_Event e;
 	bool quit = false;
+
+	double frame_time = dtime();
 	//double frame_time = dtime();
 	while (!quit){
 		while (SDL_PollEvent(&e)){
@@ -107,8 +109,15 @@ int main(int argc, char *argv[]) {
 
 
 		}
-		//double start = dtime();
-		for(size_t i = 0; i < 1; i++) {
+
+
+		double now = dtime();
+
+		std::cout << "\r" << 1.0/ ( (now-frame_time) );
+
+		frame_time = now;
+
+		for(size_t i = 0; i < 6; i++) {
 			sim.step();
 		}
 
